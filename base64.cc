@@ -48,29 +48,29 @@ std::string Base64::encode(const std::string &in) {
 
 void Base64::buf4_to_buf3(const unsigned char *b4, unsigned char *b3) {
     b3[0] = ((b4[0] << 2) + ((b4[1] & 0x30) >> 4));
-    b3[1] = ((b4[1] & 0x0F << 4) + ((b4[2] & 0x3C)>> 2));
-    b3[2] = ((b4[2] & 0x03) << 6) + b4[3];
+    b3[1] = ((b4[1] & 0xF) << 4) + ((b4[2] & 0x3C)>> 2);
+    b3[2] = ((b4[2] & 0x3) << 6) + b4[3];
 }
 
 std::string Base64::decode(const std::string &in) {
-    if(!in.empty()) {
+    int len = in.length();
+    if(len < 2) {
         return nullptr;
     }
 
     std::string result;
     int pos = 0;
 
-    for(char t : in) {
-        if(t == '=')
+    for(int i = 0; i < len; ++i) {
+        if(in[i] == '=') {
             break;
-        this->buf4[pos++] = t;
+        }
+
+        this->buf4[pos++] = this->tranform(in[i]);
         if(pos == 4) {
-            for(int j = 0; j < 4; ++j) {
-                this->buf4[j] = this->tranform(this->buf4[j]);
-            }
             this->buf4_to_buf3(this->buf4, this->buf3);
-            for(int i = 0; i < 3; ++i) {
-                result += this->buf3[i];
+            for(int j = 0; j < 3; ++j) {
+                result += this->buf3[j];
             }
             pos = 0;
         }
@@ -79,20 +79,18 @@ std::string Base64::decode(const std::string &in) {
         for(int j = pos; j < 4; ++j) {
             this->buf4[j] = '\0';
         }
-        for(int j = 0; j < 4; ++j) {
-            this->buf4[j] = this->tranform(this->buf4[j]);
-        }
         this->buf4_to_buf3(this->buf4, this->buf3);
-        for(int j = 0; j < 3; ++j) {
-            result += this->buf3[j];
+        for(int i = 0; i < pos; ++i) {
+            result += this->buf3[i];
         }
     }
     return result;
 }
 
-unsigned char Base64::tranform(unsigned char &c) {
+unsigned char Base64::tranform(const char &c) {
     if(c >= 'A' && c <= 'Z') {
         return c - 'A';
+        std::cout << (c-'A') << "\n";
     }
 
     if(c >= 'a' && c <= 'z') {
@@ -105,5 +103,5 @@ unsigned char Base64::tranform(unsigned char &c) {
 
     if(c == '+') return 62;
     if(c == '/') return 63;
-    return 0;
+    return 255;
 }

@@ -4,10 +4,21 @@
 #include <iostream>
 #include <string>
 
-const char mapping_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                            "abcdefghijklmnopqrstuvwxyz"
-                            "0123456789"
-                            "+/";
+const char mapping_table[] = {'A','B','C','D','E','F','G','H','I','J',
+                              'K','L','M','N','O','P','Q','R','S','T',
+                              'U','V','W','X','Y','Z','a','b','c','d',
+                              'e','f','g','h','i','j','k','l','m','n',
+                              'o','p','q','r','s','t','u','v','w','x',
+                              'y','z','0','1','2','3','4','5','6','7',
+                              '8','9','+','/'};
+
+const char mapping_table_url[] = {'A','B','C','D','E','F','G','H','I','J',
+                              'K','L','M','N','O','P','Q','R','S','T',
+                              'U','V','W','X','Y','Z','a','b','c','d',
+                              'e','f','g','h','i','j','k','l','m','n',
+                              'o','p','q','r','s','t','u','v','w','x',
+                              'y','z','0','1','2','3','4','5','6','7',
+                              '8','9','-','_'};
 
 class Base64
 {
@@ -33,7 +44,7 @@ private:
     void buf3_to_buf4(const unsigned char *b3, unsigned char *b4);
     void buf4_to_buf3(const unsigned char *b4, unsigned char *b3);
 
-    unsigned char tranform(unsigned char &c);
+    unsigned char tranform(const char &c);
 };
 
 #endif
