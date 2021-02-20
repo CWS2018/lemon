@@ -37,7 +37,7 @@ std::string Base64::encode(const std::string &in) {
             result += mapping_table[this->buf4[j]];
         }
 
-        // =
+        // 
         while(pos++ < 3) {
             result += "=";
         }
@@ -90,7 +90,6 @@ std::string Base64::decode(const std::string &in) {
 unsigned char Base64::tranform(const char &c) {
     if(c >= 'A' && c <= 'Z') {
         return c - 'A';
-        std::cout << (c-'A') << "\n";
     }
 
     if(c >= 'a' && c <= 'z') {
